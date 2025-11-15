@@ -2,7 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>贪吃蛇游戏</title>
     <link rel="stylesheet" href="style.css">
 </head>
@@ -362,24 +364,30 @@
         leftBtn.addEventListener('click', () => changeDirection(-1, 0));
         rightBtn.addEventListener('click', () => changeDirection(1, 0));
 
-        // 滑动手势控制
+        // 滑动手势控制（优化 iOS 支持）
         let touchStartX = 0;
         let touchStartY = 0;
         let touchEndX = 0;
         let touchEndY = 0;
 
         canvas.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-            touchStartY = e.changedTouches[0].screenY;
-        }, false);
+            e.preventDefault();
+            touchStartX = e.changedTouches[0].clientX;
+            touchStartY = e.changedTouches[0].clientY;
+        }, { passive: false });
+
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+        }, { passive: false });
 
         canvas.addEventListener('touchend', (e) => {
+            e.preventDefault();
             if (!gameStarted) return;
 
-            touchEndX = e.changedTouches[0].screenX;
-            touchEndY = e.changedTouches[0].screenY;
+            touchEndX = e.changedTouches[0].clientX;
+            touchEndY = e.changedTouches[0].clientY;
             handleSwipe();
-        }, false);
+        }, { passive: false });
 
         function handleSwipe() {
             const deltaX = touchEndX - touchStartX;
