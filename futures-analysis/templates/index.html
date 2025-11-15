@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>苹果期货数据分析系统</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🍎 苹果期货数据分析系统</h1>
+            <p class="subtitle">Apple Futures Data Analysis Platform</p>
+        </header>
+
+        <div class="alert alert-warning">
+            <strong>⚠️ 风险提示：</strong> 本系统仅供技术分析和学习使用，不构成任何投资建议。期货投资有风险，入市需谨慎！
+        </div>
+
+        <!-- 主力合约信息 -->
+        <section class="main-contract-section">
+            <h2>📊 主力合约实时行情</h2>
+            <div class="main-contract-card" id="mainContractCard">
+                <div class="loading">加载中...</div>
+            </div>
+        </section>
+
+        <!-- 技术分析 -->
+        <section class="analysis-section">
+            <h2>📈 技术分析指标</h2>
+            <div class="analysis-card" id="analysisCard">
+                <div class="loading">加载中...</div>
+            </div>
+        </section>
+
+        <!-- 期货合约列表 -->
+        <section class="contracts-section">
+            <h2>📋 所有合约列表</h2>
+            <div class="controls">
+                <button class="btn btn-primary" onclick="refreshData()">🔄 刷新数据</button>
+                <button class="btn btn-secondary" onclick="exportData()">💾 导出数据</button>
+                <span class="update-time" id="updateTime"></span>
+            </div>
+            <div class="table-container">
+                <table id="contractsTable">
+                    <thead>
+                        <tr>
+                            <th>合约代码</th>
+                            <th>合约名称</th>
+                            <th>最新价</th>
+                            <th>涨跌额</th>
+                            <th>涨跌幅</th>
+                            <th>今开</th>
+                            <th>最高</th>
+                            <th>最低</th>
+                            <th>成交量</th>
+                            <th>持仓量</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contractsBody">
+                        <tr>
+                            <td colspan="10" class="loading">加载中...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- 图表展示 -->
+        <section class="charts-section">
+            <h2>📊 数据可视化</h2>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>价格对比</h3>
+                    <canvas id="priceChart"></canvas>
+                </div>
+                <div class="chart-card">
+                    <h3>成交量分布</h3>
+                    <canvas id="volumeChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>💡 本系统使用Python开发，采用Flask框架 + Chart.js可视化</p>
+            <p>⚡ 数据来源：东方财富网期货行情（仅供学习参考）</p>
+        </footer>
+    </div>
+
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
