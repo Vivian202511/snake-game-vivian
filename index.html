@@ -35,8 +35,22 @@
 
         <div class="instructions">
             <p>🎮 使用方向键 ↑ ↓ ← → 控制蛇的移动</p>
+            <p>📱 手机可使用下方方向键或滑动屏幕</p>
             <p>🍎 吃到食物增加分数和长度</p>
             <p>⚠️ 不要撞墙或撞到自己!</p>
+        </div>
+
+        <!-- 触屏控制按钮 -->
+        <div class="mobile-controls">
+            <div class="dpad">
+                <button class="arrow-btn up" id="up-btn">↑</button>
+                <div class="middle-row">
+                    <button class="arrow-btn left" id="left-btn">←</button>
+                    <div class="center"></div>
+                    <button class="arrow-btn right" id="right-btn">→</button>
+                </div>
+                <button class="arrow-btn down" id="down-btn">↓</button>
+            </div>
         </div>
     </div>
 
@@ -302,6 +316,97 @@
         startBtn.addEventListener('click', startGame);
         pauseBtn.addEventListener('click', togglePause);
         restartBtn.addEventListener('click', restartGame);
+
+        // 触屏方向键控制
+        const upBtn = document.getElementById('up-btn');
+        const downBtn = document.getElementById('down-btn');
+        const leftBtn = document.getElementById('left-btn');
+        const rightBtn = document.getElementById('right-btn');
+
+        function changeDirection(newDx, newDy) {
+            if (!gameStarted) return;
+
+            // 防止反向移动
+            if (newDx !== 0 && dx === 0) {
+                dx = newDx;
+                dy = 0;
+            } else if (newDy !== 0 && dy === 0) {
+                dx = 0;
+                dy = newDy;
+            }
+        }
+
+        upBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            changeDirection(0, -1);
+        });
+
+        downBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            changeDirection(0, 1);
+        });
+
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            changeDirection(-1, 0);
+        });
+
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            changeDirection(1, 0);
+        });
+
+        // 鼠标点击支持（方便桌面测试）
+        upBtn.addEventListener('click', () => changeDirection(0, -1));
+        downBtn.addEventListener('click', () => changeDirection(0, 1));
+        leftBtn.addEventListener('click', () => changeDirection(-1, 0));
+        rightBtn.addEventListener('click', () => changeDirection(1, 0));
+
+        // 滑动手势控制
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchEndX = 0;
+        let touchEndY = 0;
+
+        canvas.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+        }, false);
+
+        canvas.addEventListener('touchend', (e) => {
+            if (!gameStarted) return;
+
+            touchEndX = e.changedTouches[0].screenX;
+            touchEndY = e.changedTouches[0].screenY;
+            handleSwipe();
+        }, false);
+
+        function handleSwipe() {
+            const deltaX = touchEndX - touchStartX;
+            const deltaY = touchEndY - touchStartY;
+            const minSwipeDistance = 30;
+
+            // 判断滑动方向
+            if (Math.abs(deltaX) > Math.abs(deltaY)) {
+                // 水平滑动
+                if (Math.abs(deltaX) > minSwipeDistance) {
+                    if (deltaX > 0) {
+                        changeDirection(1, 0); // 右
+                    } else {
+                        changeDirection(-1, 0); // 左
+                    }
+                }
+            } else {
+                // 垂直滑动
+                if (Math.abs(deltaY) > minSwipeDistance) {
+                    if (deltaY > 0) {
+                        changeDirection(0, 1); // 下
+                    } else {
+                        changeDirection(0, -1); // 上
+                    }
+                }
+            }
+        }
 
         // 初始化
         initGame();
