@@ -22,7 +22,7 @@ let highScore = localStorage.getItem('snakeHighScore') || 0;
 let gameLoop = null;
 let gameStarted = false;
 let gamePaused = false;
-let gameSpeed = 150; // 初始速度变慢 (从100ms改为150ms)
+let gameSpeed = 120; // 初始速度 (版本2调整)
 
 // 初始化游戏
 function initGame() {
@@ -80,15 +80,15 @@ function draw() {
     // 绘制蛇
     snake.forEach((segment, index) => {
         if (index === 0) {
-            // 蛇头
-            ctx.fillStyle = '#4CAF50';
+            // 蛇头 - 版本2改为蓝色
+            ctx.fillStyle = '#2196F3';
             ctx.shadowBlur = 10;
-            ctx.shadowColor = '#4CAF50';
+            ctx.shadowColor = '#2196F3';
         } else {
-            // 蛇身
-            ctx.fillStyle = '#81C784';
+            // 蛇身 - 版本2改为浅蓝色
+            ctx.fillStyle = '#64B5F6';
             ctx.shadowBlur = 5;
-            ctx.shadowColor = '#81C784';
+            ctx.shadowColor = '#64B5F6';
         }
 
         ctx.fillRect(
@@ -98,8 +98,8 @@ function draw() {
             GRID_SIZE - 2
         );
 
-        // 添加圆角效果
-        ctx.strokeStyle = index === 0 ? '#2E7D32' : '#66BB6A';
+        // 添加圆角效果 - 版本2蓝色边框
+        ctx.strokeStyle = index === 0 ? '#1976D2' : '#42A5F5';
         ctx.lineWidth = 2;
         ctx.strokeRect(
             segment.x * GRID_SIZE + 1,
@@ -112,10 +112,10 @@ function draw() {
     // 重置阴影
     ctx.shadowBlur = 0;
 
-    // 绘制食物
-    ctx.fillStyle = '#FF5722';
+    // 绘制食物 - 版本2改为金黄色
+    ctx.fillStyle = '#FFC107';
     ctx.shadowBlur = 15;
-    ctx.shadowColor = '#FF5722';
+    ctx.shadowColor = '#FFC107';
     ctx.beginPath();
     ctx.arc(
         food.x * GRID_SIZE + GRID_SIZE / 2,
@@ -167,9 +167,9 @@ function update() {
 
         generateFood();
 
-        // 加速游戏 (减缓加速度,让游戏更持久)
-        if (gameSpeed > 80) {
-            gameSpeed -= 1; // 每次加速减少1ms (原来是2ms)
+        // 加速游戏 (版本2调整加速度)
+        if (gameSpeed > 70) {
+            gameSpeed -= 2; // 每次加速减少2ms
             clearInterval(gameLoop);
             gameLoop = setInterval(gameUpdate, gameSpeed);
         }
@@ -211,7 +211,7 @@ function restartGame() {
     clearInterval(gameLoop);
     gameStarted = false;
     gamePaused = false;
-    gameSpeed = 150; // 重置为初始速度
+    gameSpeed = 120; // 重置为初始速度
     startBtn.textContent = '开始游戏';
     pauseBtn.textContent = '暂停';
     pauseBtn.disabled = true;
